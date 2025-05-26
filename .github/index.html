@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada de Onboarding do Novo Agente de Registro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .step-item {
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .step-item.active .step-circle {
+            background-color: #dc2626; /* red-600 */
+            color: white;
+            border-color: #dc2626; /* Highlight border for active step */
+        }
+        .step-item.completed .step-circle {
+            background-color: #34d399; /* emerald-400 */
+            color: white;
+            border-color: #34d399;
+        }
+        .step-item .step-circle {
+            border: 2px solid #d4d4d8; /* stone-300 */
+        }
+        .step-line {
+            height: 2px;
+            background-color: #d4d4d8; /* stone-300 */
+            flex-grow: 1;
+            min-width: 10px; 
+        }
+        .content-card {
+            min-height: 300px; 
+            max-width: 800px; 
+        }
+        .content-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .content-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+            border-radius: 10px;
+        }
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* slate-400 */
+            border-radius: 10px;
+        }
+        .content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* slate-500 */
+        }
+        @media (max-width: 768px) {
+            .stepper-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .step-item {
+                width: 100%;
+                margin-bottom: 0.5rem;
+                flex-direction: row;
+                align-items: center;
+            }
+            .step-line {
+                display: none; 
+            }
+            .step-item .step-circle {
+                margin-right: 0.5rem;
+            }
+            .step-item .step-text {
+                 font-size: 0.875rem;
+            }
+            .header-title-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .header-title-group img {
+                margin-bottom: 0.5rem;
+            }
+        }
+         @media (min-width: 769px) and (max-width: 1023px) { /* Tablet adjustments */
+            .step-text {
+                font-size: 0.8rem; /* Slightly smaller text for tablets if needed */
+            }
+             .step-item {
+                padding-left: 0.25rem;
+                padding-right: 0.25rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-100 text-stone-800 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+
+    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl p-6 sm:p-8 overflow-hidden">
+        <header class="text-center mb-8">
+            <div class="flex justify-center items-center header-title-group">
+                <img src="https://i.ibb.co/BKKCr9tm/logo.png" alt="Logo AR Vermelho" class="h-10 sm:h-14 mr-3" onerror="this.style.display='none'">
+                <h1 class="text-3xl sm:text-4xl font-bold text-red-700">Jornada de Onboarding</h1>
+            </div>
+            <p class="text-lg text-stone-600 mt-2">Novo Agente de Registro</p>
+        </header>
+
+        <div id="stepper" class="w-full flex items-center justify-between mb-8 stepper-container px-1">
+        </div>
+
+        <main id="content-area" class="bg-stone-50 p-6 rounded-lg shadow-inner content-card mx-auto">
+            <div id="step-content" class="content-scroll overflow-y-auto max-h-[50vh] sm:max-h-[60vh]">
+            </div>
+        </main>
+
+        <footer class="mt-8 flex flex-col sm:flex-row justify-between items-center">
+            <button id="prev-button" class="bg-stone-500 hover:bg-stone-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out mb-4 sm:mb-0 w-full sm:w-auto">
+                Anterior
+            </button>
+            <div id="step-indicator" class="text-stone-600 font-medium mb-4 sm:mb-0">Passo 1 de 6</div>
+            <button id="next-button" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out w-full sm:w-auto">
+                Próximo
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        const stepsData = [
+            {
+                title: "Habilitação de Equipamento",
+                objective: "Garantir que o equipamento do agente atende aos requisitos técnicos e de segurança para emissão de certificados.",
+                details: [
+                    "Fazer auditoria no equipamento.",
+                    "Recolher as notas fiscais do computador, webcam e leitor."
+                ],
+                detailsTitle: "Ações Necessárias:"
+            },
+            {
+                title: "Treinamento Teórico",
+                objective: "Adquirir o conhecimento fundamental sobre certificação digital, legislação e procedimentos.",
+                details: [
+                    "Estudo das normativas da ICP-Brasil.",
+                    "Compreensão dos tipos de certificados digitais.",
+                    "Políticas de segurança e responsabilidades do Agente de Registro."
+                ],
+                detailsTitle: "Tópicos Principais:"
+            },
+            {
+                title: "Treinamento Prático",
+                objective: "Desenvolver habilidades no uso dos sistemas e na condução do processo de emissão.",
+                details: [
+                    "Simulação de atendimentos e validação de documentos.",
+                    "Uso das plataformas de emissão e gestão de certificados.",
+                    "Procedimentos para coleta biométrica e assinatura."
+                ],
+                detailsTitle: "Atividades Práticas:"
+            },
+            {
+                title: "Treinamento Documental",
+                objective: "Capacitar na análise e validação da documentação exigida para cada tipo de certificado.",
+                details: [
+                    "Identificação de documentos válidos (Pessoa Física e Jurídica).",
+                    "Verificação de autenticidade e conformidade.",
+                    "Procedimentos para casos especiais e documentos estrangeiros."
+                ],
+                detailsTitle: "Foco do Treinamento:"
+            },
+            {
+                title: "Habilitação junto ao ITI",
+                objective: "Obter habilitação do ITI (Instituto Nacional de Tecnologia da Informação).",
+                details: [
+                    "A habilitação se dá toda quinta-feira. Prazo de habilitação até segunda-feira.",
+                    "Aguardar a aprovação e publicação da habilitação."
+                ],
+                status: "Processo formal de credenciamento.",
+                detailsTitle: "Etapas da Habilitação:"
+            },
+            {
+                title: "Liberação para Emissão",
+                objective: "Autorizar o agente a iniciar as atividades de emissão de certificados digitais.",
+                details: [
+                    "Configuração final dos acessos aos sistemas produtivos.",
+                    "Recebimento de materiais e credenciais de acesso.",
+                    "Comunicação oficial do início das atividades."
+                ],
+                status: "Go-Live! Agente pronto para operar.",
+                detailsTitle: "Ações Finais:"
+            },
+            {
+                title: "Conclusão da Jornada",
+                welcome: "Onboarding Concluído!",
+                teamWelcome: "Você está pronto para iniciar suas atividades como Agente de Registro!",
+                support: [
+                    "Suporte técnico e operacional contínuo.",
+                    "Recursos e materiais de apoio disponíveis.",
+                    "Desejamos sucesso em sua jornada!"
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        const totalUserSteps = stepsData.length -1; 
+
+        const stepperContainer = document.getElementById('stepper');
+        const stepContentContainer = document.getElementById('step-content');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const stepIndicator = document.getElementById('step-indicator');
+
+        function createStepper() {
+            stepperContainer.innerHTML = '';
+            stepsData.slice(0, totalUserSteps).forEach((step, index) => {
+                const stepElement = document.createElement('div');
+                // Adjusted padding for step items for better spacing with 6 items
+                stepElement.className = 'step-item flex-1 flex flex-col sm:flex-row items-center cursor-pointer p-1 rounded-md hover:bg-stone-200 text-center sm:text-left';
+                stepElement.onclick = () => goToStep(index);
+
+                const circle = document.createElement('div');
+                // Adjusted circle size and margin for 6 items
+                circle.className = 'step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-semibold text-stone-600 border-2 border-stone-300 mb-1 sm:mb-0 sm:mr-1 md:mr-2 flex-shrink-0';
+                circle.textContent = index + 1;
+                
+                const text = document.createElement('span');
+                // Adjusted text size for 6 items
+                text.className = 'step-text text-[0.65rem] sm:text-xs text-stone-700 font-medium break-words';
+                let maxLen = 18; // Default max length
+                if (window.innerWidth >= 640 && window.innerWidth < 768) maxLen = 12; // Shorter for small-medium screens
+                else if (window.innerWidth < 640) maxLen = 25; // Longer for very small (stacked)
+
+                text.textContent = step.title.length > maxLen ? step.title.substring(0,maxLen -3) + '...' : step.title; 
+                
+                stepElement.appendChild(circle);
+                stepElement.appendChild(text);
+                stepperContainer.appendChild(stepElement);
+
+                if (index < totalUserSteps - 1) {
+                    const line = document.createElement('div');
+                    line.className = 'step-line hidden sm:block mx-0.5'; // Reduced margin for line
+                    stepperContainer.appendChild(line);
+                }
+            });
+        }
+        
+        function renderStepContent() {
+            const stepData = stepsData[currentStep];
+            let contentHTML = `<h2 class="text-2xl font-bold text-red-700 mb-2">${stepData.title}</h2>`;
+            
+            if (stepData.subtitle) {
+                contentHTML += `<p class="text-sm text-stone-500 mb-4 italic">${stepData.subtitle}</p>`;
+            }
+
+            if (currentStep === totalUserSteps) { 
+                contentHTML = `
+                    <div class="text-center py-8">
+                        <h2 class="text-3xl font-bold text-red-700 mb-4">${stepData.welcome}</h2>
+                        <p class="text-xl text-stone-700 mb-6">${stepData.teamWelcome}</p>
+                        <ul class="list-none space-y-2">
+                            ${stepData.support.map(item => `<li class="text-lg text-stone-600">${item}</li>`).join('')}
+                        </ul>
+                    </div>`;
+            } else {
+                 contentHTML += `<p class="text-md text-stone-700 mb-4"><strong>Objetivo:</strong> ${stepData.objective}</p>`;
+
+                if (stepData.details) {
+                    contentHTML += `<h3 class="text-lg font-semibold text-stone-700 mt-4 mb-2">${stepData.detailsTitle || 'Detalhes:'}</h3><ul class="list-disc list-inside space-y-1 text-stone-700">`;
+                    stepData.details.forEach(item => contentHTML += `<li>${item}</li>`);
+                    contentHTML += `</ul>`;
+                }
+                if (stepData.status) {
+                    contentHTML += `<p class="text-md text-stone-700 mt-3"><strong>Status:</strong> <span class="font-semibold ${stepData.status.startsWith('Go-Live!') ? 'text-emerald-600' : 'text-stone-800'}">${stepData.status}</span></p>`;
+                }
+            }
+            stepContentContainer.innerHTML = contentHTML;
+            updateStepperUI();
+            updateButtons();
+            updateStepIndicator();
+        }
+
+        function updateStepperUI() {
+            const stepElements = stepperContainer.querySelectorAll('.step-item');
+            stepElements.forEach((el, index) => {
+                el.classList.remove('active', 'completed');
+                const circle = el.querySelector('.step-circle');
+                circle.classList.remove('bg-red-600', 'text-white', 'bg-emerald-400', 'border-red-600', 'border-emerald-400');
+                circle.classList.add('text-stone-600', 'border-stone-300');
+
+                if (index < currentStep) {
+                    el.classList.add('completed');
+                    circle.innerHTML = '&#10003;'; 
+                    circle.classList.add('bg-emerald-400', 'text-white', 'border-emerald-400');
+                    circle.classList.remove('text-stone-600', 'border-stone-300');
+                } else if (index === currentStep && currentStep < totalUserSteps) {
+                    el.classList.add('active');
+                    circle.classList.add('bg-red-600', 'text-white', 'border-red-600');
+                    circle.classList.remove('text-stone-600', 'border-stone-300');
+                } else {
+                     circle.textContent = index + 1;
+                }
+            });
+        }
+        
+        function updateButtons() {
+            prevButton.disabled = currentStep === 0;
+            prevButton.classList.toggle('opacity-50', currentStep === 0);
+            prevButton.classList.toggle('cursor-not-allowed', currentStep === 0);
+
+            if (currentStep === totalUserSteps) { 
+                nextButton.textContent = 'Finalizar';
+                nextButton.classList.remove('bg-red-600', 'hover:bg-red-700');
+                nextButton.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
+            } else if (currentStep === totalUserSteps + 1) { 
+                 nextButton.textContent = 'Reiniciar Jornada';
+                 nextButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
+                 nextButton.classList.add('bg-red-600', 'hover:bg-red-700');
+            }
+            else {
+                nextButton.textContent = 'Próximo';
+                nextButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
+                nextButton.classList.add('bg-red-600', 'hover:bg-red-700');
+            }
+        }
+
+        function updateStepIndicator() {
+            if (currentStep < totalUserSteps) {
+                stepIndicator.textContent = `Passo ${currentStep + 1} de ${totalUserSteps}`;
+                stepIndicator.classList.remove('hidden');
+            } else {
+                stepIndicator.classList.add('hidden');
+            }
+        }
+
+        function goToStep(stepIndex) {
+            if (stepIndex >= 0 && stepIndex <= totalUserSteps) {
+                currentStep = stepIndex;
+                renderStepContent();
+            }
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentStep > 0) {
+                if (currentStep === totalUserSteps + 1) { 
+                    currentStep = totalUserSteps -1;
+                } else {
+                    currentStep--;
+                }
+                renderStepContent();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentStep < totalUserSteps) {
+                currentStep++;
+                renderStepContent();
+            } else if (currentStep === totalUserSteps) { 
+                currentStep++; 
+                stepContentContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <h2 class="text-3xl font-bold text-red-700 mb-4">Jornada Concluída!</h2>
+                    <p class="text-xl text-stone-700">Você revisou todas as etapas do onboarding.</p>
+                </div>`;
+                updateButtons();
+                stepperContainer.querySelectorAll('.step-item').forEach(el => el.classList.remove('active'));
+                stepperContainer.querySelectorAll('.step-item').forEach(el => el.classList.add('completed'));
+                stepperContainer.querySelectorAll('.step-item .step-circle').forEach(circle => {
+                    circle.innerHTML = '&#10003;';
+                    circle.classList.add('bg-emerald-400', 'text-white', 'border-emerald-400');
+                });
+
+
+            } else { 
+                currentStep = 0;
+                renderStepContent();
+                createStepper(); 
+                updateStepperUI(); 
+            }
+        });
+        
+        // Initial load
+        createStepper();
+        renderStepContent();
+
+        // Adjust stepper text on resize for better fit
+        window.addEventListener('resize', createStepper);
+    </script>
+
+</body>
+</html>
