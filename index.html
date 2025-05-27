@@ -85,14 +85,14 @@
              .step-item {
                 padding-left: 0.25rem;
                 padding-right: 0.25rem;
-            }
+             }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-stone-100 text-stone-800 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
 
-    <div class="w-full max-w-4xl bg-white shadow-2xl rounded-xl p-6 sm:p-8 overflow-hidden">
+    <div class="w-full max-w-5xl bg-white shadow-2xl rounded-xl p-6 sm:p-8 overflow-hidden">
         <header class="text-center mb-8">
             <div class="flex justify-center items-center header-title-group">
                 <img src="https://i.ibb.co/BKKCr9tm/logo.png" alt="Logo AR Vermelho" class="h-10 sm:h-14 mr-3" onerror="this.style.display='none'">
@@ -113,7 +113,7 @@
             <button id="prev-button" class="bg-stone-500 hover:bg-stone-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out mb-4 sm:mb-0 w-full sm:w-auto">
                 Anterior
             </button>
-            <div id="step-indicator" class="text-stone-600 font-medium mb-4 sm:mb-0">Passo 1 de 6</div>
+            <div id="step-indicator" class="text-stone-600 font-medium mb-4 sm:mb-0">Passo 1 de 5</div>
             <button id="next-button" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out w-full sm:w-auto">
                 Próximo
             </button>
@@ -121,6 +121,7 @@
     </div>
 
     <script>
+        // --- CÓDIGO ALTERADO ---
         const stepsData = [
             {
                 title: "Habilitação de Equipamento",
@@ -143,23 +144,16 @@
             },
             {
                 title: "Treinamento Prático",
-                objective: "Desenvolver habilidades no uso dos sistemas e na condução do processo de emissão.",
+                objective: "Desenvolver habilidades no uso dos sistemas, na condução do processo de emissão e na análise documental.",
                 details: [
                     "Simulação de atendimentos e validação de documentos.",
                     "Uso das plataformas de emissão e gestão de certificados.",
-                    "Procedimentos para coleta biométrica e assinatura."
-                ],
-                detailsTitle: "Atividades Práticas:"
-            },
-            {
-                title: "Treinamento Documental",
-                objective: "Capacitar na análise e validação da documentação exigida para cada tipo de certificado.",
-                details: [
+                    "Procedimentos para coleta biométrica e assinatura.",
                     "Identificação de documentos válidos (Pessoa Física e Jurídica).",
                     "Verificação de autenticidade e conformidade.",
                     "Procedimentos para casos especiais e documentos estrangeiros."
                 ],
-                detailsTitle: "Foco do Treinamento:"
+                detailsTitle: "Atividades Práticas:"
             },
             {
                 title: "Habilitação junto ao ITI",
@@ -177,7 +171,8 @@
                 details: [
                     "Configuração final dos acessos aos sistemas produtivos.",
                     "Recebimento de materiais e credenciais de acesso.",
-                    "Comunicação oficial do início das atividades."
+                    "Comunicação oficial do início das atividades.",
+                    "<strong>Ponto Virtual:</strong> Registro de hora de entrada e saída no ponto virtual para emissão."
                 ],
                 status: "Go-Live! Agente pronto para operar.",
                 detailsTitle: "Ações Finais:"
@@ -195,7 +190,7 @@
         ];
 
         let currentStep = 0;
-        const totalUserSteps = stepsData.length -1; 
+        const totalUserSteps = stepsData.length - 1; 
 
         const stepperContainer = document.getElementById('stepper');
         const stepContentContainer = document.getElementById('step-content');
@@ -207,23 +202,18 @@
             stepperContainer.innerHTML = '';
             stepsData.slice(0, totalUserSteps).forEach((step, index) => {
                 const stepElement = document.createElement('div');
-                // Adjusted padding for step items for better spacing with 6 items
                 stepElement.className = 'step-item flex-1 flex flex-col sm:flex-row items-center cursor-pointer p-1 rounded-md hover:bg-stone-200 text-center sm:text-left';
                 stepElement.onclick = () => goToStep(index);
 
                 const circle = document.createElement('div');
-                // Adjusted circle size and margin for 6 items
                 circle.className = 'step-circle w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-semibold text-stone-600 border-2 border-stone-300 mb-1 sm:mb-0 sm:mr-1 md:mr-2 flex-shrink-0';
                 circle.textContent = index + 1;
                 
                 const text = document.createElement('span');
-                // Adjusted text size for 6 items
+                // --- CÓDIGO ALTERADO ---
+                // Alterado para sempre mostrar o texto completo
                 text.className = 'step-text text-[0.65rem] sm:text-xs text-stone-700 font-medium break-words';
-                let maxLen = 18; // Default max length
-                if (window.innerWidth >= 640 && window.innerWidth < 768) maxLen = 12; // Shorter for small-medium screens
-                else if (window.innerWidth < 640) maxLen = 25; // Longer for very small (stacked)
-
-                text.textContent = step.title.length > maxLen ? step.title.substring(0,maxLen -3) + '...' : step.title; 
+                text.textContent = step.title;
                 
                 stepElement.appendChild(circle);
                 stepElement.appendChild(text);
@@ -231,7 +221,7 @@
 
                 if (index < totalUserSteps - 1) {
                     const line = document.createElement('div');
-                    line.className = 'step-line hidden sm:block mx-0.5'; // Reduced margin for line
+                    line.className = 'step-line hidden sm:block mx-0.5';
                     stepperContainer.appendChild(line);
                 }
             });
