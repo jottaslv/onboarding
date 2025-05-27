@@ -113,7 +113,7 @@
             <button id="prev-button" class="bg-stone-500 hover:bg-stone-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out mb-4 sm:mb-0 w-full sm:w-auto">
                 Anterior
             </button>
-            <div id="step-indicator" class="text-stone-600 font-medium mb-4 sm:mb-0">Passo 1 de 5</div>
+            <div id="step-indicator" class="text-stone-600 font-medium mb-4 sm:mb-0">Passo 1 de 6</div>
             <button id="next-button" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-150 ease-in-out w-full sm:w-auto">
                 Próximo
             </button>
@@ -121,7 +121,6 @@
     </div>
 
     <script>
-        // --- CÓDIGO ALTERADO ---
         const stepsData = [
             {
                 title: "Habilitação de Equipamento",
@@ -166,13 +165,23 @@
                 detailsTitle: "Etapas da Habilitação:"
             },
             {
+                title: "Ponto Virtual",
+                objective: "Compreender a importância e o procedimento para o registro de ponto eletrônico.",
+                details: [
+                    "O registro de ponto é obrigatório e deve ser feito diariamente na Sólides.",
+                    "Registre sua entrada ao <strong>iniciar</strong> o atendimento e sua <strong>saída,</strong> ao finalizar o atendimento.",
+                    "Qualquer inconsistência ou esquecimento deve ser comunicado à responsável pelo ponto eletrônico.",
+                    "Este controle é essencial para a conformidade trabalhista."
+                ],
+                detailsTitle: "Pontos de Atenção:"
+            },
+            {
                 title: "Liberação para Emissão",
                 objective: "Autorizar o agente a iniciar as atividades de emissão de certificados digitais.",
                 details: [
                     "Configuração final dos acessos aos sistemas produtivos.",
                     "Recebimento de materiais e credenciais de acesso.",
-                    "Comunicação oficial do início das atividades.",
-                    "<strong>Ponto Virtual:</strong> Explicação do registro de hora de entrada e saída no ponto virtual para emissão."
+                    "Comunicação oficial do início das atividades."
                 ],
                 status: "Go-Live! Agente pronto para operar.",
                 detailsTitle: "Ações Finais:"
@@ -210,8 +219,6 @@
                 circle.textContent = index + 1;
                 
                 const text = document.createElement('span');
-                // --- CÓDIGO ALTERADO ---
-                // Alterado para sempre mostrar o texto completo
                 text.className = 'step-text text-[0.65rem] sm:text-xs text-stone-700 font-medium break-words';
                 text.textContent = step.title;
                 
